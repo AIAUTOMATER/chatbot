@@ -274,7 +274,7 @@ with st.sidebar:
     if st.button("New Chat", key="new_chat"):
         st.session_state.chat_history = []
         st.session_state.current_conversation = "new_chat"
-        st.experimental_rerun()
+        st.rerun()
     
     # Save current conversation
     if st.button("Save Current Chat", key="save_chat"):
@@ -298,7 +298,7 @@ with st.sidebar:
             filepath = f"e:/nlp/nvidia/conversations/{st.session_state.saved_conversations[selected_conversation]}"
             st.session_state.chat_history = load_conversation(filepath)
             st.session_state.current_conversation = selected_conversation
-            st.experimental_rerun()
+            st.rerun()
     else:
         st.info("No saved conversations found.")
 
@@ -381,5 +381,5 @@ with col2:
     if st.button("Clear Chat", key="clear_chat_main"):
         st.session_state.chat_history = []
         st.session_state.current_conversation = "new_chat"
-        st.experimental_rerun()
+        st.rerun()
 

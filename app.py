@@ -96,11 +96,71 @@ with st.sidebar:
     st.title("Chat Settings")
     
     # Model selection
-    model = st.selectbox(
-        "Select Model",
-        ["nvidia/llama-3.1-nemotron-ultra-253b-v1", "nvidia/mixtral-8x7b-instruct-v0.1"],
+    model_categories = {
+        "NVIDIA NeMo Large Models": [
+            "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+            "nvidia/nemotron-4-340b-instruct-v0",
+            "nvidia/nemotron-4-340b-chat-4k-v0",
+            "nvidia/nemotron-4-340b-instruct-4k-v0",
+            "nvidia/nemotron-4-340b-instruct-8k-v0",
+        ],
+        "Llama Models": [
+            "nvidia/llama2-70b-chat-fp8",
+            "nvidia/llama2-70b-chat-sft-fp8",
+            "nvidia/llama3-8b-instruct-v1.0",
+            "nvidia/llama3-70b-instruct-v1.0",
+            "nvidia/llama-3.1-8b-instruct-v1",
+            "nvidia/llama-3.1-405b-instruct-v1.0",
+        ],
+        "Mixtral Models": [
+            "nvidia/mixtral-8x7b-instruct-v0.1",
+            "nvidia/mixtral-8x22b-instruct-v0.1",
+        ],
+        "Stable Code Models": [
+            "nvidia/stablecode-instruct-alpha-v0.1",
+            "nvidia/stablecode-completion-alpha-v0.1",
+        ],
+        "Claude Models (via NVIDIA)": [
+            "nvidia/claude-3-opus-20240229-v1",
+            "nvidia/claude-3-sonnet-20240229-v1",
+            "nvidia/claude-3-haiku-20240307-v1",
+        ],
+        "NVIDIA LLaVA Models": [
+            "nvidia/llava-adapter-lora-llama2-7b-v0.1",
+            "nvidia/llava-adapter-lora-llama3-8b-v0.1",
+        ]
+    }
+
+    # Create a dropdown to select model category first
+    model_category = st.selectbox(
+        "Model Category",
+        options=list(model_categories.keys()),
         index=0
     )
+
+    # Then show models from that category
+    model = st.selectbox(
+        "Select Model",
+        options=model_categories[model_category],
+        index=0
+    )
+
+    # Add model info tooltip
+    with st.expander("About Selected Model"):
+        model_info = {
+            "nvidia/llama-3.1-nemotron-ultra-253b-v1": "NVIDIA's 253B parameter version of Llama 3.1, optimized for instruction following and detailed responses.",
+            "nvidia/nemotron-4-340b-instruct-v0": "NVIDIA's 340B parameter flagship model, instruction-tuned for enterprise use cases.",
+            "nvidia/mixtral-8x7b-instruct-v0.1": "An instruction-tuned version of Mixtral 8x7B, a Mixture of Experts (MoE) model.",
+            "nvidia/llama3-70b-instruct-v1.0": "Fine-tuned 70B Llama 3 optimized for instruction following.",
+            # Default info for other models
+        }
+        
+        if model in model_info:
+            st.info(model_info[model])
+        else:
+            st.info("A NVIDIA NIM-hosted model. Check NVIDIA documentation for specific details.")
+        
+        st.caption("Note: Model availability may vary based on your NVIDIA API access. Some models may require specific permissions.")
     
     # Temperature slider
     temperature = st.slider("Temperature", min_value=0.0, max_value=1.0, value=0.6, step=0.1)
